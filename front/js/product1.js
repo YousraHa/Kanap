@@ -1,3 +1,5 @@
+
+
 function callFetch(){
     const id = window.location.search.substring(4);
 
@@ -6,7 +8,7 @@ function callFetch(){
             response.json()
         )
         .then((data) => {
-            console.log(data, 'data1');
+            // console.log(data, 'data1');
             getProduct(data);
             addToCart(data);
         })
@@ -18,7 +20,7 @@ function callFetch(){
 
 function getProduct(data){
     
-    console.log(data,' data2');
+    // console.log(data,' data2');
 
     const createElem = (elem) =>{
         return document.createElement(elem)
@@ -56,36 +58,91 @@ function getProduct(data){
 
 function addToCart(data){
 
-    let storage = [];
 
     const addCart = document.querySelector("#addToCart");
 
     addCart.addEventListener('click', (event)=>{
 
         const getColor = document.querySelector("#colors").value;
-        console.log(getColor, 'getcol');
-
         const getValue = document.querySelector("#quantity").value;
-        console.log(getValue, 'getval');
-        console.log(data, "dat");
         const id = data._id;
-
+        const getLocalStorage = localStorage.getItem('myKanap', []);
+        console.log(getLocalStorage, 'kbekbdjd')
+        
         const cart = {
             color : getColor,
             value : getValue,
             id : id
         }
-        if (!storage.find(elem=>
-            // console.log(elem, "elem")
-            elem.id === id 
-            // && elem.value ===getValue 
-            // && elem.color === getColor
-        )){
 
-            storage.push(cart);
-            
-            console.log(storage, 'storage')
-        }
+        let storage = [];
+
+
+        const product = getLocalStorage.find((item)=>{
+
+            if (!item){
+                console.log(item.id)
+                storage.push(cart)
+                // localStorage.setItem('myKanap', getValue)
+
+            } else{
+
+                console.log('else')
+            }
+
+         });
+        console.log(product, 'localffeffe');
+
+        console.log(getLocalStorage, 'local storage');
+         
+        // localStorage.setItem("cart", "[]");
+        // let cart1 = localStorage.getItem("cart");
+
+        // console.log(cart1, 'cart1');
+
+        //  if(cart1.length == 0){
+        //     cart1.push(product);
+        //     console.log(cart1, 'cart1');
+        //  }
+        //   else {
+        //     let res = cart1.find(element =>element);
+        //     console.log(res, 'resss');
+        //     // if(res === undefined){
+        //     //     cart1.push(product);
+        //     // }
+        //  }
+        //  localStorage.setItem("cart", JSON.stringify(cart1));
+
+    // if(localStorage.getItem('myKanap')){
+    //     storage = JSON.parse(localStorage.getItem('myKanap'));
+    //     console.log(storage, 'str1')
+    // }
+    // storage.push(cart);
+    // localStorage.setItem('myKanap', JSON.stringify(storage));
+    // console.log(storage, 'storage')
+
+        
+        // storage.push(cart);
+
+        // if (storage.find(elem=>
+        //     // console.log(elem, "elem")
+        //     elem.id === id
+        // )){
+        //     console.log(storage, 'storage1')
+        //     elem.value === value
+        // } else {
+        //     storage.push(cart);
+
+        //     localStorage.setItem("myKanap",JSON.stringify(storage));
+        //     const str = localStorage.getItem('myKanap');
+        //     console.log(str, 'local storage')
+
+        //     console.log(storage, 'storage2');
+        //     console.log('erreur')
+        // }
+        // const cartId = localStorage.getItem('myKanap');
+        // console.log(cartId, 'log');
+
     })
 }
 
