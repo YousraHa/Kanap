@@ -52,9 +52,9 @@ function onePicture(){
                 const article = document.querySelector(`a[href='./product.html?id=${product._id}']`);
                 
                 article.appendChild(createArticle);
-                createArticle.appendChild(pic)
-                createArticle.appendChild(h3)
-                createArticle.appendChild(p)
+                createArticle.appendChild(pic);
+                createArticle.appendChild(h3);
+                createArticle.appendChild(p);
 
                     // let href = document.querySelector("a");
                     
