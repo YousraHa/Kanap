@@ -1,5 +1,3 @@
-
-
 function callFetch(){
     const id = window.location.search.substring(4);
 
@@ -68,7 +66,6 @@ function addToCart(data){
             value : getValue,
             id : id
         };
-
 
         let products = [];
 
