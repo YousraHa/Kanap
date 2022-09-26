@@ -1,32 +1,24 @@
-const getApi = () => {
-    
-    fetch(`http://localhost:3000/api/products`)
-    .then((response) => 
-        response.json()
-    )
-    .then((dataFromApi) => {
-        getProduct(dataFromApi);
-        removeItemFromCart(dataFromApi);
-    })
-    .catch((error)=>{
-        console.log(error, 'error')
-})};
+    const getApi = () => {
+        
+        fetch(`http://localhost:3000/api/products`)
+        .then((response) => 
+            response.json()
+        )
+        .then((dataFromApi) => {
+            getProduct(dataFromApi);
+            removeItemFromCart();
+        })
+        .catch((error)=>{
+            console.log(error, 'error')
+    })};
 
-// const createElemList = ()=>{
-
-// }
-const dataFromStorage = JSON.parse(localStorage.getItem('productLocalStorage'));
-console.log(dataFromStorage, 'datafrostroage');
-var sum = 0;
-var str = [];
-const test = (pricePerArticle) =>{
-    console.log(str.push(pricePerArticle), 'help');
-//     for(let prix of pricePerArticle){
-//     sum += prix;
-//     str.push(sum);
-//     return sum
-// }
-}
+    const dataFromStorage = JSON.parse(localStorage.getItem('productLocalStorage'));
+    console.log(dataFromStorage, 'datafrostroage');
+    // var sum = 0;
+    // var str = [];
+    // const test = (pricePerArticle) =>{
+    //     console.log(str.push(pricePerArticle), 'help');
+    // }
 
 function getProduct(dataFromApi){
     const createElem = (elem) =>{
@@ -43,35 +35,17 @@ function getProduct(dataFromApi){
         }
     };
 
-    // console.log(dataStorage, 'datastorage');
 
-// };
-
-// const appendList =()=>{
-
-
-    // console.log(localStorage.getItem('productLocalStorage'), 'dataFromStorage local str');
-    // const exp = (pricePerArticle) =>{
-    //     for(const x of pricePerArticle){
-    //         console.log(x, 'xxx')
-    //     }
-    //     }
-    //     console.log(exp, 'exppp')
-
-        const help = dataFromStorage.map((elem)=>{
-        // console.log(elem, 'elem');
+    const addTxtContent =(attr, text)=>{
+        attr.textContent = text;
+    };
+    const help = dataFromStorage.map((elem, index, array)=>{
+        
         const findId = dataFromApi.find((el)=>
         el._id === elem.id
         );
 
-        const addTxtContent =(attr, text)=>{
-            attr.textContent = text;
-        };
-
-        // console.log(elem, 'elem');
-
         const section = getSelector("#cart__items");
-        const finalPrice = getSelector("#totalPrice");
         const article = createElem("article");
         const div = createElem("div");
         const img = createElem("img");
@@ -84,15 +58,10 @@ function getProduct(dataFromApi){
         const p = createElem("p");
         const pColor = createElem("p");
         const pPrice = createElem("p");
+        console.log(pPrice, 'pprice')
         const pQty = createElem("p");
         const pDelete = createElem("p");
-        const input = createElem("input");
-    // };
-    
-    // const setAttributesList =()=>{
-    
-        // createElemList();
-    
+        const input = createElem("input");    
 
         section.appendChild(article);
         article.appendChild(div);
@@ -120,73 +89,35 @@ function getProduct(dataFromApi){
         setAttributes(input, {"type":"number", "class":"itemQuantity", "name":"itemQuantity", "min":"1", "max":"100", "value":elem.value});
         setAttributes(pDelete, {"class":"deleteItem"});
         setAttributes(img, {"src":findId.imageUrl, "alt":findId.altTxt});
-    
-
         
         const pricePerArticle = findId.price * elem.value;
-        // console.log(pricePerArticle, 'price')
+        console.log(pPrice.value, 'price')
         addTxtContent(h2, findId.name);
         addTxtContent(pColor, elem.color);
         addTxtContent(pPrice, pricePerArticle + "€");
         addTxtContent(pQty, "Qté:");
         addTxtContent(pDelete, "Supprimer");
-        addTxtContent(totalPrice, pricePerArticle);
-        console.log(test(pricePerArticle), 'sum')
-        // for(let x in pricePerArticle){
-        // }
-        // sum =+ pricePerArticle*pricePerArticle;
-        // pricePerArticle.forEach(val=>{
-        //     console.log(val ,"val")
-        // })
-        // let strg = [];
-        // strg.push(pricePerArticle);
-        // console.log(strg, 'strg');
-        // console.log(typeof(findId.price), 'type');
+        // console.log(test(pricePerArticle), 'sum');
+        // console.log(index, 'index');
+        // console.log(array, 'array');
 
-        // exp(pricePerArticle)
-        // const test = pricePerArticle.reduce((a, b)=> a+b, 0)
-        // console.log(test, 'sum')
-        // pricePerArticle.map(elem=>console.log(elem,'elemmm'))
         return pricePerArticle
     });
 
-    // dataFromStorage.map((elem)=>{
+    const totalPrice = getSelector("#totalPrice");
+    const finalPrice = help.reduce((a, b)=> a+b, 0);
+    addTxtContent(totalPrice, finalPrice)
 
-
-    // })
-
-//     let deleteItems = document.querySelectorAll(".deleteItem");
-//     for (const item of deleteItems){
-//      item.addEventListener('click',(event)=>{
-//         // localStorage.removeItem("productLocalStorage");
-//         // console.log('click');
-//         // const mapped = dataFromStorage.map((elem)=>{ 
-//         // const foundIndex = data.find(el=>
-//         //     el._id === elem.id
-//         //     );
-//         console.log('foundindex');
-//      }
-//         // if (foundIndex > -1){
-//         //     console.log('id = id');
-//         // } else {
-//         //     console.log('else');
-//         // }
-//     // });
-//     // console.log(mapped, 'mapped')
-//     // console.log(elem, 'elem');
-// )}
 
 };
 
 
-const removeItemFromCart = (dataFromApi)=>{
+const removeItemFromCart = ()=>{
 
     let deleteItems = document.querySelectorAll(".deleteItem");
     for (const [i, item] of deleteItems.entries()){
         item.addEventListener('click', (event)=>{
             console.log('click', i);
-            // dataFromStorage.map((elem)=>{
-            // dataFromStorage[0].splice(i, 1)
             const remove = dataFromStorage.splice(i, 1);
             console.log(remove, 'remov');
             console.log(dataFromStorage, 'dataFromStorage');
@@ -194,35 +125,7 @@ const removeItemFromCart = (dataFromApi)=>{
             localStorage.setItem('productLocalStorage', JSON.stringify(dataFromStorage));
             window.location.reload()
         })
-        // })
     };
-
-
-//     let deleteItems = document.querySelectorAll(".deleteItem");
-//     dataFromStorage.map((elem)=>{ 
-//     for (const item of deleteItems){
-//         // item.findIndex((elem)=> console.log(elem, 'find index in item'));
-//         // localStorage.removeItem("productLocalStorage");
-//         // console.log('click');
-//             console.log(elem, 'elem2');
-//             item.addEventListener('click',(event)=>{
-//             // const foundIndex = dataFromStorage.findIndex(el=>
-//             //  el._id === elem.id
-//             // );
-//             console.log('foundindex')
-//             // if (foundIndex > -1){
-//             //     console.log('id = id');
-//             // } else {
-//             //     console.log('else');
-//             // }
-//         });
-//     }
-// })
-        // console.log(maap, 'foundindex');
-    // });
-    // console.log(mapped, 'mapped')
-    // console.log(elem, 'elem');
-//     const deleteItems = document.querySelectorAll(".deleteItem");
 
 }
 
