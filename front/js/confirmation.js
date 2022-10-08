@@ -44,27 +44,61 @@
 //     console.error('Error:::::', error)
 // )
 
-const test = async()=>{
+// const postFetch = async()=>{
 
-    let user = {
-        firstName: 'jyggkh',
-        lastName: 'jgkjfjg',
-        adress: 'kdbjf',
-        city:'kdsbk',
-        email: 'kjef@htk.com'
-      };
+//     let user = {
+//         "contact": {   
+//         "firstName": "jyggkh",
+//         "lastName": "gkjfjg",
+//         "address": "kdbjf",
+//         "city":"kdsbk",
+//         "email": "kjef@htk.com"
+//     },
+//         "products": [],
+//         "orderId": "dsfd"
+    
+//       };
       
-      let response = await fetch('http://localhost:3000/api/products/order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(user)
-      });
+//       let response = await fetch('http://localhost:3000/api/products/order', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json;charset=utf-8'
+//         },
+//         body: JSON.stringify(user)
+//       });
       
-      let result = await response.json();
-      console.log(result);
-      alert(result.message);
-}
+//       let result = await response.json();
+//       console.log(result, 'ee');
+//       alert(result.message);
+// }
 
-test()
+// postFetch()
+
+
+
+// fetch('http://localhost:3000/api/products/order')
+//     .then(response =>response.json())
+//     .then((data) => {
+        
+//     }
+//     // console.log(data, 'dataaaa')
+//     )   
+//     .catch((error) => 
+//     console.error('Error:::::', error)
+// )
+
+const getConfirmation = ()=>{
+    const queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+
+    const page_type = urlParams.get('orderid')
+
+    console.log(page_type);
+    const getOrder = document.querySelector("#orderId");
+
+    getOrder.textContent = page_type
+ 
+};
+
+getConfirmation()
