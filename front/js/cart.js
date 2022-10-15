@@ -135,6 +135,7 @@ const updateCount = () =>{
 
 const placeOrder = () =>{
     const getOrder = document.querySelector("#order");
+
     const getEmail = document.querySelector("#email");
     const getFirstName = document.querySelector("#firstName");
     const getLastName = document.querySelector("#lastName");
@@ -145,49 +146,110 @@ const placeOrder = () =>{
     const getLNErr = document.querySelector('#lastNameErrorMsg');
     const getCityErr = document.querySelector('#cityErrorMsg');
     const getAddressErr = document.querySelector('#addressErrorMsg');
+    const getEmailErr = document.querySelector("#emailErrorMsg");
 
     const booleen = true;
     //var bool if input false = bool false
-    const getEmailErr = document.querySelector("#emailErrorMsg")
     const regEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const regNoDigit = /^([^0-9]*)$/
 
-    console.log(getEmail.value, 'value');
+    // console.log(getEmail.value, 'value');
 
     getEmail.addEventListener('change', (evt)=>{
-        event1 = evt.target.value
-        event1 = event1.replace(regEx);
-        console.log(event1);
+        console.log(evt.target.value);
         let test = regEx.test(getEmail.value); //use this
-        if(test === false){
+        if(test === false || getEmail.value === ""){
             evt.preventDefault();
             getEmailErr.textContent = 'Adresse email incorrecte !';
         } else {
-            console.log('right address email')
+            getEmailErr.textContent = '';
         }
     });
 
+    getFirstName.addEventListener('change', (evt)=>{
+        console.log(evt.target.value);
+        let test = regNoDigit.test(getFirstName.value);
+        if(test === false || getFirstName.value === ""){
+            evt.preventDefault();
+            getFNErr.textContent = 'Champ incorrect !';
+        } else {
+            getFNErr.textContent = '';
+        }
+    });
+
+    getLastName.addEventListener('change', (evt)=>{
+        // console.log(evt.target.value);
+        let test = regNoDigit.test(getLastName.value);
+        if(test === false || getLastName.value === ""){
+            evt.preventDefault();
+            getLNErr.textContent = 'Champ incorrect !';
+        } else {
+            getLNErr.textContent = '';
+        }
+    });
+
+    getAddress.addEventListener('change', (evt)=>{
+        // console.log(evt.target.value);
+        let test = /^[a-zA-Z0-9\s,'-]*$/.test(getAddress.value);
+        if(test === false || getAddress.value === ""){
+            evt.preventDefault();
+            getAddressErr.textContent = 'Champ incorrect !';
+        } else {
+            getAddressErr.textContent = '';
+        }
+    });
+
+    getCity.addEventListener('change', (evt)=>{
+        // console.log(evt.target.value);
+        let test = regNoDigit.test(getCity.value); 
+        if(test === false || getCity.value === ""){
+            evt.preventDefault();
+            getCityErr.textContent = 'Champ incorrect !';
+        } else {
+            getCityErr.textContent = '';
+        }
+    });
     //func for all inputs
 
     const checkInputs = () =>{
         let boolEmail = regEx.test(getEmail.value);
         let boolFN = regNoDigit.test(getFirstName.value);
         let boolLN = regNoDigit.test(getLastName.value);
+        let boolCity = regNoDigit.test(getCity.value);
+        let boolAddress = /^[a-zA-Z0-9\s,'-]*$/.test(getAddress.value);
 
+        console.log(boolAddress, 'boolAddress');
         console.log(boolEmail, 'boolEmail');
         console.log(boolFN, 'boolFN');
         console.log(boolLN, 'boolLN');
+        console.log(boolCity, 'boolCity');
 
+        if (    boolEmail === false ||
+                boolFN === false ||
+                boolLN === false||
+                boolCity === false|| 
+                boolAddress === false ||
+                getFirstName.value === ""|| 
+                getLastName.value === ""|| 
+                getAddress.value === ""|| 
+                getCity.value === ""|| 
+                getEmail.value === ""){
+            return false
+        } else {
+            return true
+        }
     }
 
     getOrder.addEventListener('click', (event)=>{
         event.preventDefault();
-        checkInputs()
-        alert('submitting');
+        if (checkInputs() === false){
+            alert('Formulaire incorrect !')
+        } else {
+        // alert('submitting');
         //call bool func
         //commenter toutes les fonctions
         // window.history.back();
-        const getFN= document.querySelector("#firstName").value
+        const getFN= document.querySelector("#firstName").value;
         console.log(getFN, 'dnksjn');
         const getLN = document.querySelector("#lastName").value;
         const getAddress = document.querySelector("#address").value;
@@ -225,7 +287,8 @@ const placeOrder = () =>{
             .catch((error) => 
             console.error('Error:::::', error)
         )
-        console.log('click')
+        console.log('click');
+        }
     })
 
       
