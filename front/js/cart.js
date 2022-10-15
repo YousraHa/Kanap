@@ -136,32 +136,63 @@ const updateCount = () =>{
 const placeOrder = () =>{
     const getOrder = document.querySelector("#order");
     const getEmail = document.querySelector("#email");
-    const getNameErr = document.querySelector('#firstNameErrorMsg');
+    const getFirstName = document.querySelector("#firstName");
+    const getLastName = document.querySelector("#lastName");
+    const getAddress = document.querySelector("#address");
+    const getCity = document.querySelector("#city");
+
+    const getFNErr = document.querySelector('#firstNameErrorMsg');
+    const getLNErr = document.querySelector('#lastNameErrorMsg');
+    const getCityErr = document.querySelector('#cityErrorMsg');
+    const getAddressErr = document.querySelector('#addressErrorMsg');
+
+    const booleen = true;
+    //var bool if input false = bool false
     const getEmailErr = document.querySelector("#emailErrorMsg")
     const regEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-
+    const regNoDigit = /^([^0-9]*)$/
 
     console.log(getEmail.value, 'value');
+
     getEmail.addEventListener('change', (evt)=>{
         event1 = evt.target.value
         event1 = event1.replace(regEx);
         console.log(event1);
-        let test = regEx.test(getEmail.value);
+        let test = regEx.test(getEmail.value); //use this
         if(test === false){
-            getEmailErr.textContent = 'wrong address email'
+            evt.preventDefault();
+            getEmailErr.textContent = 'Adresse email incorrecte !';
         } else {
             console.log('right address email')
         }
     });
+
+    //func for all inputs
+
+    const checkInputs = () =>{
+        let boolEmail = regEx.test(getEmail.value);
+        let boolFN = regNoDigit.test(getFirstName.value);
+        let boolLN = regNoDigit.test(getLastName.value);
+
+        console.log(boolEmail, 'boolEmail');
+        console.log(boolFN, 'boolFN');
+        console.log(boolLN, 'boolLN');
+
+    }
+
     getOrder.addEventListener('click', (event)=>{
         event.preventDefault();
+        checkInputs()
+        alert('submitting');
+        //call bool func
+        //commenter toutes les fonctions
+        // window.history.back();
         const getFN= document.querySelector("#firstName").value
         console.log(getFN, 'dnksjn');
         const getLN = document.querySelector("#lastName").value;
         const getAddress = document.querySelector("#address").value;
         const getCity = document.querySelector("#city").value;
         const getEmail = document.querySelector("#email").value;
-
 
     console.log(dataFromStorage, 'storage');
 
@@ -187,9 +218,10 @@ const placeOrder = () =>{
             body: JSON.stringify(user)
           })
             .then(response =>response.json())
-            .then((data) => 
-            window.location = `./confirmation.html?orderid=${data.orderId}`
-            )   
+            .then((data) => {
+                window.location = `./confirmation.html?orderid=${data.orderId}`;
+                localStorage.clear();
+            })   
             .catch((error) => 
             console.error('Error:::::', error)
         )
