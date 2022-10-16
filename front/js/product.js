@@ -1,3 +1,4 @@
+//fetch data from api
 function callFetch(){
     const id = window.location.search.substring(4);
 
@@ -14,7 +15,7 @@ function callFetch(){
         })
     }
     
-
+//create dom elements
 function getProduct(data){
     
     const createElem = (elem) =>{
@@ -50,7 +51,7 @@ function getProduct(data){
 
 
 }
-
+//adds items to cart and local storage
 function addToCart(data){
 
     const addCart = document.querySelector("#addToCart");
@@ -80,18 +81,15 @@ function addToCart(data){
 
         if (foundIndex > -1){
 
-            console.log(products[foundIndex], 'foundIndex');
             const finalValue = products[foundIndex].value + getValue;
             products[foundIndex].value = finalValue;
-            console.log('id is the same');
 
         } else {
             products.push(cartItems);
-            
         }
         
         localStorage.setItem('productLocalStorage', JSON.stringify(products));
-
+        window.location = `./index.html`
     })
 }
 

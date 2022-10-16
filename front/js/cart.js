@@ -1,3 +1,4 @@
+//fetching data from api and call functions
 const getApi = () => {
     
     fetch(`http://localhost:3000/api/products`)
@@ -17,15 +18,16 @@ const getApi = () => {
 const dataFromStorage = JSON.parse(localStorage.getItem('productLocalStorage'));
 const dataFromStorage1 = JSON.stringify(localStorage.getItem('productLocalStorage'));
 
+    //automation 
     const addTxtContent =(attr, text)=>{
         attr.textContent = text;
     }
     const createElem = (elem) =>{
-        return document.createElement(elem)
+        return document.createElement(elem);
     };
 
     const getSelector = (elem)=>{
-        return document.querySelector(elem)
+        return document.querySelector(elem);
     };
 
     function setAttributes(el, attrs) {
@@ -34,6 +36,7 @@ const dataFromStorage1 = JSON.stringify(localStorage.getItem('productLocalStorag
         }
     };
 
+//creating dom elements
 function getProduct(dataFromApi){
 
     const help = dataFromStorage.map((elem, index, array)=>{
@@ -43,7 +46,7 @@ function getProduct(dataFromApi){
         )
 
         const section = getSelector("#cart__items");
-        const getForm = getSelector('.cart__order__form')
+        const getForm = getSelector('.cart__order__form');
         const article = createElem("article");
         const div = createElem("div");
         const img = createElem("img");
@@ -103,24 +106,21 @@ function getProduct(dataFromApi){
 
 };
 
-
+//removes item from cart and in local storage
 const removeItemFromCart = () =>{
 
     let deleteItems = document.querySelectorAll(".deleteItem");
     for (const [i, item] of deleteItems.entries()){
-        item.addEventListener('click', (event)=>{
-            console.log('click', i);
-            const remove = dataFromStorage.splice(i, 1);
-            console.log(remove, 'remove');
-            console.log(dataFromStorage, 'dataFromStorage');
 
+        item.addEventListener('click', (event)=>{
+            const remove = dataFromStorage.splice(i, 1);
             localStorage.setItem('productLocalStorage', JSON.stringify(dataFromStorage));
             window.location.reload();
         })
     }
 
 };
-
+//update local storage when quantity changes
 const updateCount = () =>{
     const getInput = document.querySelectorAll(".itemQuantity");
     for (const [i, input] of getInput.entries()){
@@ -133,6 +133,7 @@ const updateCount = () =>{
     };
 };
 
+//placing order function to check inputs and POST request
 const placeOrder = () =>{
     const getOrder = document.querySelector("#order");
 
@@ -148,26 +149,22 @@ const placeOrder = () =>{
     const getAddressErr = document.querySelector('#addressErrorMsg');
     const getEmailErr = document.querySelector("#emailErrorMsg");
 
-    const booleen = true;
-    //var bool if input false = bool false
     const regEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const regNoDigit = /^([^0-9]*)$/
 
-    // console.log(getEmail.value, 'value');
 
+    //check inputs individually
     getEmail.addEventListener('change', (evt)=>{
-        console.log(evt.target.value);
         let test = regEx.test(getEmail.value); //use this
         if(test === false || getEmail.value === ""){
             evt.preventDefault();
-            getEmailErr.textContent = 'Adresse email incorrecte !';
+            getEmailErr.textContent = 'Champ incorrect !';
         } else {
             getEmailErr.textContent = '';
         }
     });
 
     getFirstName.addEventListener('change', (evt)=>{
-        console.log(evt.target.value);
         let test = regNoDigit.test(getFirstName.value);
         if(test === false || getFirstName.value === ""){
             evt.preventDefault();
@@ -178,7 +175,6 @@ const placeOrder = () =>{
     });
 
     getLastName.addEventListener('change', (evt)=>{
-        // console.log(evt.target.value);
         let test = regNoDigit.test(getLastName.value);
         if(test === false || getLastName.value === ""){
             evt.preventDefault();
@@ -189,7 +185,6 @@ const placeOrder = () =>{
     });
 
     getAddress.addEventListener('change', (evt)=>{
-        // console.log(evt.target.value);
         let test = /^[a-zA-Z0-9\s,'-]*$/.test(getAddress.value);
         if(test === false || getAddress.value === ""){
             evt.preventDefault();
@@ -200,7 +195,6 @@ const placeOrder = () =>{
     });
 
     getCity.addEventListener('change', (evt)=>{
-        // console.log(evt.target.value);
         let test = regNoDigit.test(getCity.value); 
         if(test === false || getCity.value === ""){
             evt.preventDefault();
@@ -209,20 +203,17 @@ const placeOrder = () =>{
             getCityErr.textContent = '';
         }
     });
-    //func for all inputs
 
+    //end check input individually
+
+    //check all inputs
     const checkInputs = () =>{
+
         let boolEmail = regEx.test(getEmail.value);
         let boolFN = regNoDigit.test(getFirstName.value);
         let boolLN = regNoDigit.test(getLastName.value);
         let boolCity = regNoDigit.test(getCity.value);
         let boolAddress = /^[a-zA-Z0-9\s,'-]*$/.test(getAddress.value);
-
-        console.log(boolAddress, 'boolAddress');
-        console.log(boolEmail, 'boolEmail');
-        console.log(boolFN, 'boolFN');
-        console.log(boolLN, 'boolLN');
-        console.log(boolCity, 'boolCity');
 
         if (    boolEmail === false ||
                 boolFN === false ||
@@ -233,34 +224,31 @@ const placeOrder = () =>{
                 getLastName.value === ""|| 
                 getAddress.value === ""|| 
                 getCity.value === ""|| 
-                getEmail.value === ""){
+                getEmail.value === ""
+            ){
             return false
         } else {
             return true
         }
     }
 
+    //listens to click event on submit button and checks if form is correct
     getOrder.addEventListener('click', (event)=>{
         event.preventDefault();
         if (checkInputs() === false){
             alert('Formulaire incorrect !')
         } else {
-        // alert('submitting');
-        //call bool func
-        //commenter toutes les fonctions
-        // window.history.back();
         const getFN= document.querySelector("#firstName").value;
-        console.log(getFN, 'dnksjn');
         const getLN = document.querySelector("#lastName").value;
         const getAddress = document.querySelector("#address").value;
         const getCity = document.querySelector("#city").value;
         const getEmail = document.querySelector("#email").value;
 
-    console.log(dataFromStorage, 'storage');
+        //loop through storage to return item
+        const products = dataFromStorage.map(elem=>{
+            return elem.id
+        });
 
-    const products = dataFromStorage.map(elem=>{
-        return elem.id
-    })
         let user = {    
             "contact": {   
             "firstName": getFN,
@@ -271,7 +259,8 @@ const placeOrder = () =>{
         },
             "products": products,
           };
-          
+
+          //POST request to send data to the server after submit
           fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
             headers: {
@@ -287,45 +276,11 @@ const placeOrder = () =>{
             .catch((error) => 
             console.error('Error:::::', error)
         )
-        console.log('click');
         }
     })
-
       
-    //   let result = response.json();
-    //   alert(result.message);
 }
 
-// const test = ()=>{
-
-//     let user = {    
-//         "contact": {   
-//         "firstName": "jyggkh",
-//         "lastName": "gkjfjg",
-//         "address": "kdbjf",
-//         "city":"kdsbk",
-//         "email": "getEmail"
-//     },
-//         "products": [],
-//         "orderId": "dsfd"
-    
-//       };
-      
-//       let response = fetch('http://localhost:3000/api/products/order', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json;charset=utf-8'
-//         },
-//         body: JSON.stringify(user)
-//       })
-//         .then(response =>response.json())
-//         .then((data) => 
-//         console.log(data, 'dataaaa'))   
-//         .catch((error) => 
-//         console.error('Error:::::', error)
-//     )
-
-// }
 
 getApi()
 
