@@ -9,7 +9,7 @@ const getApi = () => {
         getProduct(dataFromApi);
         removeItemFromCart(dataFromApi);
         updateCount();
-        placeOrder();
+        placeOrder(dataFromApi);
     })
     .catch((error)=>{
         console.log(error, 'error')
@@ -38,15 +38,18 @@ const dataFromStorage1 = JSON.stringify(localStorage.getItem('productLocalStorag
 
 //creating dom elements
 function getProduct(dataFromApi){
-
+    if(dataFromStorage){
     const help = dataFromStorage.map((elem, index, array)=>{
         
         const findId = dataFromApi.find((el)=>
         el._id === elem.id
-        )
+        );
+
+        console.log(dataFromStorage.length, 'dataFromStorage');
 
         const section = getSelector("#cart__items");
         const getForm = getSelector('.cart__order__form');
+        const totalQty = getSelector('#totalQuantity');
         const article = createElem("article");
         const div = createElem("div");
         const img = createElem("img");
@@ -96,6 +99,7 @@ function getProduct(dataFromApi){
         addTxtContent(pPrice, pricePerArticle + "€");
         addTxtContent(pQty, "Qté:");
         addTxtContent(pDelete, "Supprimer");
+        addTxtContent(totalQty, dataFromStorage.length)
 
         return pricePerArticle
     })
@@ -103,23 +107,24 @@ function getProduct(dataFromApi){
         const totalPrice = getSelector("#totalPrice");
         const finalPrice = help.reduce((a, b)=> a+b, 0);
         addTxtContent(totalPrice, finalPrice);
+} else {
+    console.log('undefined');
+}
 
 };
 
 //removes item from cart and in local storage
 const removeItemFromCart = () =>{
-
     let deleteItems = document.querySelectorAll(".deleteItem");
     for (const [i, item] of deleteItems.entries()){
-
         item.addEventListener('click', (event)=>{
             const remove = dataFromStorage.splice(i, 1);
             localStorage.setItem('productLocalStorage', JSON.stringify(dataFromStorage));
             window.location.reload();
         })
     }
-
 };
+
 //update local storage when quantity changes
 const updateCount = () =>{
     const getInput = document.querySelectorAll(".itemQuantity");
@@ -134,7 +139,9 @@ const updateCount = () =>{
 };
 
 //placing order function to check inputs and POST request
-const placeOrder = () =>{
+const placeOrder = (dataFromApi) =>{
+    console.log(dataFromStorage, 'dataFromStorage');
+
     const getOrder = document.querySelector("#order");
 
     const getEmail = document.querySelector("#email");
@@ -148,6 +155,8 @@ const placeOrder = () =>{
     const getCityErr = document.querySelector('#cityErrorMsg');
     const getAddressErr = document.querySelector('#addressErrorMsg');
     const getEmailErr = document.querySelector("#emailErrorMsg");
+    // const storage = JSON.parse(localStorage.getItem('productLocalStorage'))
+    // console.log(storage, 'storage');
 
     const regEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const regNoDigit = /^([^0-9]*)$/
@@ -208,6 +217,7 @@ const placeOrder = () =>{
 
     //check all inputs
     const checkInputs = () =>{
+        console.log('test');
 
         let boolEmail = regEx.test(getEmail.value);
         let boolFN = regNoDigit.test(getFirstName.value);
@@ -231,25 +241,26 @@ const placeOrder = () =>{
             return true
         }
     }
-
     //listens to click event on submit button and checks if form is correct
     getOrder.addEventListener('click', (event)=>{
+
         event.preventDefault();
-        if (checkInputs() === false){
-            alert('Formulaire incorrect !')
+
+        if (checkInputs() === false || dataFromStorage === null){
+            alert('Commande incorrecte !')
         } else {
         const getFN= document.querySelector("#firstName").value;
         const getLN = document.querySelector("#lastName").value;
         const getAddress = document.querySelector("#address").value;
         const getCity = document.querySelector("#city").value;
         const getEmail = document.querySelector("#email").value;
-
+        
         //loop through storage to return item
         const products = dataFromStorage.map(elem=>{
             return elem.id
         });
 
-        let user = {    
+        let user = {
             "contact": {   
             "firstName": getFN,
             "lastName": getLN,
@@ -268,17 +279,22 @@ const placeOrder = () =>{
             },
             body: JSON.stringify(user)
           })
-            .then(response =>response.json())
+            .then(response => response.json())
             .then((data) => {
+                // if(dataFromStorage == null){
+                //     alert('no')
+                // } else {
                 window.location = `./confirmation.html?orderid=${data.orderId}`;
                 localStorage.clear();
+                // }
             })   
             .catch((error) => 
             console.error('Error:::::', error)
         )
-        }
+    }
+    // }
     })
-      
+
 }
 
 

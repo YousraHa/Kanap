@@ -1,3 +1,4 @@
+//get id from URL
 const getConfirmation = ()=>{
     const queryString = window.location.search;
 
